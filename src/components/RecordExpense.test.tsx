@@ -19,7 +19,7 @@ describe('<RecordExpense />', () => {
 
     it('should shows an empty input for record expense amount', () => {
       expect(input.exists()).toBe(true);
-      expect(input.props().value).toBe(undefined);
+      expect(input.props().value).toEqual('');
     });
   });
 
@@ -68,6 +68,8 @@ describe('<RecordExpense />', () => {
 
     it('should disable submit button if amount is empty or 0', () => {
       amountInput.simulate('change', { target: { value: undefined } });
+      expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
+      amountInput.simulate('change', { target: { value: '' } });
       expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
       amountInput.simulate('change', { target: { value: 0.0 } });
       expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);

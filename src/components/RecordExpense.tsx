@@ -61,7 +61,7 @@ export class RecordExpense extends Component<{}, State> {
             className="amount"
             placeholder="Amount"
             required
-            value={amount}
+            value={amount ? amount : ''}
             onChange={e => this.onChange('amount', e.target.value)}
           />
           <input
