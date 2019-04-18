@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
+import Combobox from 'react-widgets/lib/Combobox'
 
 import { getInputValue, getInputProps } from '../utils/helper';
 import { RecordExpense } from './RecordExpense';
@@ -26,7 +27,7 @@ describe('<RecordExpense />', () => {
   describe('category input', () => {
     let input: ShallowWrapper;
     beforeEach(() => {
-      input = wrapper.find('input.category');
+      input = wrapper.find(Combobox);
     });
     it('should shows an empty input for record expense category', () => {
       expect(input.exists()).toBe(true);
@@ -59,7 +60,7 @@ describe('<RecordExpense />', () => {
     beforeEach(() => {
       button = wrapper.find('input.submit');
       amountInput = wrapper.find('input.amount');
-      categoryInput = wrapper.find('input.category');
+      categoryInput = wrapper.find(Combobox);
       dateInput = wrapper.find(DateTimePicker);
     });
     it('should shows a submit button', () => {
@@ -67,27 +68,40 @@ describe('<RecordExpense />', () => {
     });
 
     it('should disable submit button if amount is empty or 0', () => {
+      dateInput.simulate('change', new Date());
+      categoryInput.simulate('change', 'c');
+
       amountInput.simulate('change', { target: { value: undefined } });
       expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
-      amountInput.simulate('change', { target: { value: '' } });
-      expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
       amountInput.simulate('change', { target: { value: 0.0 } });
+      expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
+      amountInput.simulate('change', { target: { value: '0' } });
+      expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
+      amountInput.simulate('change', { target: { value: '' } });
       expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
     });
 
     it('should disable submit button if category is empty', () => {
-      categoryInput.simulate('change', { target: { value: '' } });
+      dateInput.simulate('change', new Date());
+      amountInput.simulate('change', { target: { value: '4.5' } });
+
+      categoryInput.simulate('change', '');
       expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
     });
 
     it('should disable submit button if date is empty', () => {
-      dateInput.simulate('change', { target: { defaultValue: '' } });
+      amountInput.simulate('change', { target: { value: '4.5' } });
+      categoryInput.simulate('change', 'cc');
+
+      dateInput.simulate('change', null);
+      expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
+      dateInput.simulate('change', undefined);
       expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
     });
 
     it('should enable submit button if category and amount value are right', () => {
-      amountInput.simulate('change', { target: { value: 0.1 } });
-      categoryInput.simulate('change', { target: { value: 'cc' } });
+      amountInput.simulate('change', { target: { value: '0.1' } });
+      categoryInput.simulate('change', 'cc');
       expect(getInputProps(wrapper, 'input.submit').disabled).toBe(false);
     });
   });
@@ -99,13 +113,13 @@ describe('<RecordExpense />', () => {
     let submitButton: ShallowWrapper;
     beforeEach(() => {
       amountInput = wrapper.find('input.amount');
-      categoryInput = wrapper.find('input.category');
+      categoryInput = wrapper.find(Combobox);
       dateInput = wrapper.find(DateTimePicker);
       submitButton = wrapper.find('input.submit');
     });
 
     it('should validate amount can be any number but 0', () => {
-      categoryInput.simulate('change', { target: { value: 0 } });
+      categoryInput.simulate('change', 'c');
       amountInput.simulate('change', { target: { value: 0 } });
     });
   });

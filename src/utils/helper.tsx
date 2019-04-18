@@ -10,6 +10,16 @@ export const getInputProps = (wrapper: ShallowWrapper, selector: string) => {
   return input.props();
 };
 
+export const isEmpty = (s?: string | null) => {
+  if (s === undefined) {
+    return true;
+  } else if (s === null) {
+    return true;
+  } else {
+    return s.trim() === '';
+  }
+};
+
 export const compareTwoArraies = (arr1: any[], arr2: any[]) => {
   if (!arr1 && !arr2) return true;
 

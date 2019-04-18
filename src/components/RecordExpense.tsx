@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import 'react-widgets/dist/css/react-widgets.css';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
-
+import Combobox from 'react-widgets/lib/Combobox';
 import Moment from 'moment';
 import momentLocalizer from 'react-widgets-moment';
+
+import { isEmpty } from '../utils/helper';
 
 Moment.locale('en');
 momentLocalizer();
 
 interface State {
   amount?: number;
-  category: string;
-  date: Date;
+  category: string | null;
+  date?: Date;
 }
 
 export class RecordExpense extends Component<{}, State> {
@@ -27,10 +29,9 @@ export class RecordExpense extends Component<{}, State> {
   disabled = () => {
     const { amount, category, date } = this.state;
     if (
-      amount === undefined ||
-      amount === 0 ||
-      date === null ||
-      category.trim() === ''
+      [undefined, 0, '', '0'].includes(amount) ||
+      !date ||
+      isEmpty(category)
     ) {
       return true;
     } else {
@@ -64,13 +65,11 @@ export class RecordExpense extends Component<{}, State> {
             value={amount ? amount : ''}
             onChange={e => this.onChange('amount', e.target.value)}
           />
-          <input
-            name="category"
-            className="category"
+          <Combobox
+            data={['orange', 'red', 'blue', 'purple']}
             placeholder="Category"
-            required
             value={category}
-            onChange={e => this.onChange('category', e.target.value)}
+            onChange={value => this.onChange('category', value)}
           />
           <DateTimePicker
             defaultValue={date}
