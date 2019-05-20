@@ -1,13 +1,13 @@
-import { CategoryState } from '../category/types';
+import { Category } from '../category/types';
 
 export interface Expense {
   id: number;
   amount: number;
   date: string;
-  category: CategoryState;
+  category: Category;
 }
 
-export interface ExpensesState {
+export interface ExpenseHistoryState {
   expenses: Expense[];
 }
 
@@ -19,7 +19,7 @@ export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 interface GetExpenses {
   type: typeof GET_EXPENSES;
-  expenses: ExpensesState;
+  expenses: ExpenseHistoryState;
 }
 
 interface RecordExpenseAction {

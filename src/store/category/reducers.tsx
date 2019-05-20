@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { CategoryState, SEARCH_CATEGORY, CategoryActionTypes } from './types';
+import { CategoryState, GET_CATEGORIES, CategoryActionTypes } from './types';
 
 const initialState: CategoryState = {
   categories: []
@@ -10,7 +10,7 @@ export const categoryReducer: Reducer<CategoryState, CategoryActionTypes> = (
   action: CategoryActionTypes
 ) => {
   switch (action.type) {
-    case SEARCH_CATEGORY:
+    case GET_CATEGORIES:
       return {
         ...state,
         ...action.categroies

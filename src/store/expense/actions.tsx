@@ -1,12 +1,12 @@
 import {
   Expense,
-  ExpensesState,
+  ExpenseHistoryState,
   GET_EXPENSES,
   RECORD_EXPENSE,
   DELETE_EXPENSE
 } from './types';
 
-export const getExpenses = (expenses: ExpensesState) => {
+export const getExpenses = (expenses: ExpenseHistoryState) => {
   return {
     type: GET_EXPENSES,
     expenses

@@ -1,13 +1,10 @@
 import { Reducer } from 'redux';
 import { AuthState, LOGIN, LOGOUT, AuthActionTypes } from './types';
+import { assertExhaustiveSwitch } from '../../utils/helper';
 
 const initialState: AuthState = {
-  loggedIn: false,
-  uid: null,
-  userName: null
+  loginState: 'ANONYMOUS'
 };
-
-const neverReached = (never: never) => {};
 
 export const authReducer: Reducer<AuthState, AuthActionTypes> = (
   state = initialState,
@@ -23,12 +20,13 @@ export const authReducer: Reducer<AuthState, AuthActionTypes> = (
     case LOGOUT: {
       return {
         ...state,
+        loginState: 'ANONYMOUS',
         uid: null,
-        userName: null
+        username: null
       };
     }
     default:
-      neverReached(action); // when a new action is created, this helps us remember to handle it in the reducer
+      assertExhaustiveSwitch(action);
   }
   return state;
 };

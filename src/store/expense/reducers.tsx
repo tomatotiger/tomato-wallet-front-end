@@ -1,20 +1,20 @@
 import { Reducer } from 'redux';
 import {
-  ExpensesState,
+  ExpenseHistoryState,
   GET_EXPENSES,
   RECORD_EXPENSE,
   DELETE_EXPENSE,
   ExpenseActionTypes
 } from './types';
 
-const initialState: ExpensesState = {
+const initialState: ExpenseHistoryState = {
   expenses: []
 };
 
-export const expenseReducer: Reducer<ExpensesState, ExpenseActionTypes> = (
-  state = initialState,
-  action: ExpenseActionTypes
-) => {
+export const expenseReducer: Reducer<
+  ExpenseHistoryState,
+  ExpenseActionTypes
+> = (state = initialState, action: ExpenseActionTypes) => {
   switch (action.type) {
     case GET_EXPENSES:
       return {

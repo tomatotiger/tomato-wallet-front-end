@@ -7,11 +7,11 @@ export interface CategoryState {
   categories: Category[];
 }
 
-export const SEARCH_CATEGORY = 'SEARCH_CATEGORY';
+export const GET_CATEGORIES = 'SEARCH_CATEGORIES';
 
-interface SearchCategoryAction {
-  type: typeof SEARCH_CATEGORY;
+interface GetCategoriesAction {
+  type: typeof GET_CATEGORIES;
   categroies: CategoryState;
 }
 
-export type CategoryActionTypes = SearchCategoryAction;
+export type CategoryActionTypes = GetCategoriesAction;

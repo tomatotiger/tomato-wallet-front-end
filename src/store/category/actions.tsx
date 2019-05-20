@@ -1,8 +1,8 @@
-import { CategoryState, SEARCH_CATEGORY } from './types';
+import { CategoryState, GET_CATEGORIES } from './types';
 
-export const searchCategory = (categories: CategoryState) => {
+export const getCategories = (categories: CategoryState) => {
   return {
-    type: SEARCH_CATEGORY,
+    type: GET_CATEGORIES,
     categories
   };
 };
