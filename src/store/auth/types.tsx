@@ -1,8 +1,12 @@
-export interface AuthState {
-  loggedIn: boolean;
-  uid: number | null;
-  userName: string | null;
-}
+export type AuthState =
+  | {
+      loginState: 'ANONYMOUS';
+    }
+  | {
+      loginState: 'LOGGED_IN';
+      username: string;
+      uid: number;
+    };
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
