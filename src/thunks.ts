@@ -24,7 +24,7 @@ interface TomatoHttpResponse<T> extends Response {
 }
 
 export function thunkGetCategories() {
-  return Promise.resolve({categories: categories});
+  return Promise.resolve(categories);
 }
 
 export const thunkRecordExpense = (expense: {
@@ -49,7 +49,7 @@ export const thunkDeleteExpense = (uid: number) => {
 };
 
 export const thunkGetExpenses = (eid: number) => {
-  return Promise.resolve({expenses: history });
+  return Promise.resolve(history);
 };
 
 export const thunkRetrieveExpense = (eid: number) => {

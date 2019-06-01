@@ -14,16 +14,21 @@ export interface ExpenseHistoryState {
 export const GET_EXPENSES = 'GET_EXPENSES';
 export const RETRIEVE_EXPENSE = 'RETRIEVE_EXPENSE';
 export const RECORD_EXPENSE = 'RECORD_EXPENSE';
-export const EDIT_EXPENSE = 'EDIT_EXPENSE';
+export const UPDATE_EXPENSE = 'UPDATE_EXPENSE';
 export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 interface GetExpenses {
   type: typeof GET_EXPENSES;
-  expenses: ExpenseHistoryState;
+  expenses: Expense[];
 }
 
 interface RecordExpenseAction {
   type: typeof RECORD_EXPENSE;
+  payload: Expense;
+}
+
+interface UpdateExpenseAction {
+  type: typeof UPDATE_EXPENSE;
   payload: Expense;
 }
 
@@ -35,4 +40,5 @@ interface DeleteExpenseAction {
 export type ExpenseActionTypes =
   | GetExpenses
   | RecordExpenseAction
+  | UpdateExpenseAction
   | DeleteExpenseAction;

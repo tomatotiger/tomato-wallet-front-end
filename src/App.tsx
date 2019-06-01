@@ -37,15 +37,14 @@ class App extends Component<AppProps> {
   }
 }
 
-const testUser: AuthState = {
-  loginState: 'LOGGED_IN',
+const testUser = {
   uid: 1,
   username: 'tomato'
 };
 
 export const handleInitialData = () => (dispatch: Dispatch<AnyAction>) => {
   dispatch(showLoading());
-  dispatch(login(testUser));
+  dispatch(login({ ...testUser }));
   return thunkGetInitialData(1).then(({ categories, expenses }) => {
     dispatch(getCategories(categories));
     dispatch(getExpenses(expenses));

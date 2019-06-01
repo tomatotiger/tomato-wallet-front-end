@@ -13,7 +13,7 @@ export const categoryReducer: Reducer<CategoryState, CategoryActionTypes> = (
     case GET_CATEGORIES:
       return {
         ...state,
-        ...action.categroies
+        categories: [...action.categories]
       };
     default:
       return state;

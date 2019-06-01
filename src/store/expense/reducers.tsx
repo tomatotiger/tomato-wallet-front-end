@@ -3,6 +3,7 @@ import {
   ExpenseHistoryState,
   GET_EXPENSES,
   RECORD_EXPENSE,
+  UPDATE_EXPENSE,
   DELETE_EXPENSE,
   ExpenseActionTypes
 } from './types';
@@ -19,11 +20,25 @@ export const expenseReducer: Reducer<
     case GET_EXPENSES:
       return {
         ...state,
-        ...action.expenses
+        expenses: action.expenses
       };
     case RECORD_EXPENSE:
       return {
+        ...state,
         expenses: [...state.expenses, action.payload]
+      };
+    case UPDATE_EXPENSE:
+      return {
+        ...state,
+        expenses: state.expenses.map(e => {
+          if (e.id !== action.payload.id) {
+            return e;
+          }
+          return {
+            ...e,
+            ...action.payload
+          };
+        })
       };
     case DELETE_EXPENSE:
       return {
