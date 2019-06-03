@@ -3,8 +3,10 @@ import 'react-widgets/dist/css/react-widgets.css';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
 import Combobox from 'react-widgets/lib/Combobox';
 import Moment from 'moment';
+import { connect } from 'react-redux';
 import momentLocalizer from 'react-widgets-moment';
 
+import { AppState } from '../store';
 import { isEmpty } from '../utils/helper';
 
 Moment.locale('en');
@@ -16,7 +18,7 @@ interface State {
   date?: Date;
 }
 
-export class RecordExpense extends Component<{}, State> {
+class RecordExpense extends Component<{}, State> {
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -88,3 +90,9 @@ export class RecordExpense extends Component<{}, State> {
     );
   }
 }
+
+const mapStateToProps = (state: AppState) => ({
+  history: state.expense.expenses
+});
+
+export default connect(mapStateToProps)(RecordExpense);
