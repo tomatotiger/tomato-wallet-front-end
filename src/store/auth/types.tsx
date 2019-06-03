@@ -21,4 +21,11 @@ interface LogoutAction {
   payload: AuthState;
 }
 
+export const loggedInUser = (uid: number, username: string): AuthState => ({
+  loginState: 'LOGGED_IN',
+  uid,
+  username
+});
+export const anonymousUser = (): AuthState => ({ loginState: 'ANONYMOUS' });
+
 export type AuthActionTypes = LoginAction | LogoutAction;

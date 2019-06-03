@@ -37,14 +37,9 @@ class App extends Component<AppProps> {
   }
 }
 
-const testUser = {
-  uid: 1,
-  username: 'tomato'
-};
-
 export const handleInitialData = () => (dispatch: Dispatch<AnyAction>) => {
   dispatch(showLoading());
-  dispatch(login({ ...testUser }));
+  dispatch(login(1, 'tomato'));
   return thunkGetInitialData(1).then(({ categories, expenses }) => {
     dispatch(getCategories(categories));
     dispatch(getExpenses(expenses));

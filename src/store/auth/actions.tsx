@@ -1,21 +1,21 @@
-import { AuthState, LOGIN, LOGOUT, AuthActionTypes } from './types';
+import {
+  LOGIN,
+  LOGOUT,
+  loggedInUser,
+  anonymousUser,
+  AuthActionTypes
+} from './types';
 
-export const login = ({ uid, username }: { uid: number; username: string; }): AuthActionTypes => {
+export const login = (uid: number, username: string): AuthActionTypes => {
   return {
     type: LOGIN,
-    payload: {
-      loginState: 'LOGGED_IN',
-      uid: uid,
-      username: username
-    }
+    payload: loggedInUser(uid, username)
   };
 };
 
-export const logout = () => {
+export const logout = (): AuthActionTypes => {
   return {
     type: LOGOUT,
-    payload: {
-      loginState: 'ANONYMOUS'
-    }
+    payload: anonymousUser()
   };
 };
