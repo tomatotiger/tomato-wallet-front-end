@@ -8,11 +8,11 @@ import { Homepage } from './Homepage';
 describe('<Homepage />', () => {
   const wrapper = shallow(<Homepage />);
 
-  it('should contains RecordExpense component', () => {
+  it('should contain RecordExpense component', () => {
     expect(wrapper.find(RecordExpense)).toHaveLength(1);
   });
 
-  it('should contains HistoryExpense component', () => {
+  it('should contain HistoryExpense component', () => {
     expect(wrapper.find(HistoryExpense)).toHaveLength(1);
   });
 });
