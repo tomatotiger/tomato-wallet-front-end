@@ -22,7 +22,7 @@ interface AppProps {
   handleInitialData: () => Promise<void>;
 }
 
-class App extends Component<AppProps> {
+export class UnconnectedApp extends Component<AppProps> {
   componentDidMount() {
     this.props.handleInitialData();
   }
@@ -56,4 +56,4 @@ const mapStateToProps = (state: AppState) => ({
 export default connect(
   mapStateToProps,
   { handleInitialData }
-)(App);
+)(UnconnectedApp);
