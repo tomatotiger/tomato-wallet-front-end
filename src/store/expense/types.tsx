@@ -3,8 +3,14 @@ import { Category } from '../category/types';
 export interface Expense {
   id: number;
   amount: number;
-  date: string;
+  date: Date;
   category: Category;
+}
+
+export interface NewExpense {
+  amount: number;
+  date: Date;
+  category: string;
 }
 
 export interface ExpenseHistoryState {
