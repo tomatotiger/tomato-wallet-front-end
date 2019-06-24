@@ -15,7 +15,7 @@ export const HistoryExpense: SFC<Props> = props => {
     <ul className="expense-list">
       {props.history.map(expense => (
         <li key={expense.id}>
-          {expense.amount.toFixed(2)} - {expense.category.name} - {expense.date}
+          {expense.amount.toFixed(2)} - {expense.category.name} - {expense.date.toString()}
         </li>
       ))}
     </ul>

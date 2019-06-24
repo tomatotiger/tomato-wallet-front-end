@@ -4,12 +4,13 @@ import DateTimePicker from 'react-widgets/lib/DateTimePicker';
 import Combobox from 'react-widgets/lib/Combobox'
 
 import { getInputValue, getInputProps } from '../utils/helper';
-import { RecordExpense } from './RecordExpense';
+import { UnconnectedRecordExpense } from './RecordExpense';
 
-describe('<RecordExpense />', () => {
+describe('<UnconnectedRecordExpense />', () => {
   let wrapper: ShallowWrapper;
+  const handleAddExpense = jest.fn();
   beforeEach(() => {
-    wrapper = shallow<RecordExpense>(<RecordExpense />);
+    wrapper = shallow<UnconnectedRecordExpense>(<UnconnectedRecordExpense handleAddExpense={ handleAddExpense }/>);
   });
 
   describe('amount input', () => {
@@ -121,6 +122,12 @@ describe('<RecordExpense />', () => {
     it('should validate amount can be any number but 0', () => {
       categoryInput.simulate('change', 'c');
       amountInput.simulate('change', { target: { value: 0 } });
+      expect(getInputProps(wrapper, 'input.submit').disabled).toBe(true);
+    });
+
+    it('should call handleAddExpense event when click the record button', () => {
+      submitButton.simulate('click');
+      expect(handleAddExpense).toBeCalled();
     });
   });
 });
