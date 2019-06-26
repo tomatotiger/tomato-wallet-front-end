@@ -10,7 +10,6 @@ import { ThunkDispatch } from 'redux-thunk';
 import { recordExpense } from '../store/expense/actions';
 import { NewExpense } from '../store/expense/types';
 import { AppState } from '../store';
-import { isEmpty } from '../utils/helper';
 import { createExpense } from '../api';
 import {
   Field,
@@ -37,7 +36,7 @@ interface DispatchProps {
 const createDefaultState = (): State => {
   const now = new Date();
   return {
-    amount: defaultField(''),
+    amount: defaultField('0'),
     category: defaultField(''),
     date: validField(now, now),
     loading: false
@@ -119,6 +118,7 @@ export class UnconnectedRecordExpense extends Component<DispatchProps, State> {
         <form className="record" onSubmit={this.handleSubmit}>
           <input
             name="amount"
+            id="amount"
             type="number"
             step="0.01"
             className="amount"
@@ -127,26 +127,32 @@ export class UnconnectedRecordExpense extends Component<DispatchProps, State> {
             value={amount.value}
             onChange={this.amountOnChange}
           />
-          <span className="error-message">
-            {amount.state === 'invalid' && amount.error}
-          </span>
+          {amount.state === 'invalid' && (
+            <span className="error-message" id="amount-message">
+              {amount.error}
+            </span>
+          )}
           <Combobox
             data={['orange', 'red', 'blue', 'purple']}
             placeholder="Category"
             value={category.value}
             onChange={this.categoryOnChange}
           />
-          <span className="error-message">
-            {category.state === 'invalid' && category.error}
-          </span>
+          {category.state === 'invalid' && (
+            <span className="error-message" id="category-message">
+              {category.error}
+            </span>
+          )}
           <DateTimePicker
             value={date.value}
             format="YYYY-MM-DD HH:mm:ss"
             onChange={this.dateOnChange}
           />
-          <span className="error-message">
-            {date.state === 'invalid' && date.error}
-          </span>
+          {date.state === 'invalid' && (
+            <span className="error-message" id="date-message">
+              {date.error}
+            </span>
+          )}
           <input
             name="submit"
             className="submit"
