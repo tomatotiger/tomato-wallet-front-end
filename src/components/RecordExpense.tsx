@@ -5,10 +5,10 @@ import Combobox from 'react-widgets/lib/Combobox';
 import Moment from 'moment';
 import { connect } from 'react-redux';
 import momentLocalizer from 'react-widgets-moment';
-import { ThunkDispatch } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 import { recordExpense } from '../store/expense/actions';
-import { NewExpense } from '../store/expense/types';
+import { NewExpense, ExpenseActionTypes } from '../store/expense/types';
 import { AppState } from '../store';
 import { createExpense } from '../api';
 import {
@@ -170,9 +170,10 @@ const mapStateToProps = (state: AppState) => ({
   history: state.expense.expenses
 });
 
-const thunkAddExpense = (expense: NewExpense) => {
-  return (dispatch: ThunkDispatch<{}, {}, any>, getState: Function) => {
-    // const { authedUser } = getState();
+const thunkAddExpense = (
+  expense: NewExpense
+): ThunkAction<Promise<void>, {}, {}, ExpenseActionTypes> => {
+  return (dispatch: ThunkDispatch<{}, {}, any>): Promise<void> => {
     return createExpense(expense).then(e => {
       dispatch(recordExpense(e));
     });
