@@ -38,3 +38,5 @@ export const compareTwoArraies = (arr1: any[], arr2: any[]) => {
   }
   return true;
 };
+
+export const assertExhaustiveSwitch = (arg: never) => undefined;

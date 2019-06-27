@@ -53,7 +53,7 @@ export class RecordExpense extends Component<{}, State> {
   render() {
     const { amount, category, date } = this.state;
     return (
-      <div className="content">
+      <div className="record-expense">
         <form className="record" onSubmit={this.onSubmit}>
           <input
             name="amount"
@@ -80,6 +80,7 @@ export class RecordExpense extends Component<{}, State> {
             name="submit"
             className="submit"
             type="submit"
+            value="RECORD"
             disabled={this.disabled()}
           />
         </form>
