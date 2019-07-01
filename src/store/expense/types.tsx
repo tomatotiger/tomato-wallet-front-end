@@ -4,7 +4,7 @@ export interface Expense {
   id: number;
   amount: number;
   date: Date;
-  category: Category;
+  category: Category | null;
 }
 
 export interface NewExpense {

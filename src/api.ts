@@ -1,3 +1,6 @@
+import { Expense } from './store/expense/types';
+import { Category } from './store/category/types';
+
 // import fetch from 'cross-fetch'
 
 const c1 = { id: 1, name: 'food' };
@@ -48,8 +51,25 @@ export const thunkDeleteExpense = (uid: number) => {
   return Promise.resolve('ok');
 };
 
-export const thunkGetExpenses = (eid: number) => {
-  return Promise.resolve(history);
+export const listExpense = (): Promise<Expense[]> => {
+  return fetch('http://localhost:8000/expense/')
+    .then(resp => resp.json())
+    .then((json: any) => {
+      // TODO: validation
+      return json.results.map(
+        (e: {
+          amount: string;
+          record_time: string;
+          category: Category | null;
+          id: number;
+        }): Expense => ({
+          amount: parseFloat(e.amount),
+          date: new Date(e.record_time),
+          category: e.category,
+          id: e.id
+        })
+      );
+    });
 };
 
 export const thunkRetrieveExpense = (eid: number) => {
@@ -57,7 +77,7 @@ export const thunkRetrieveExpense = (eid: number) => {
 };
 
 export const thunkGetInitialData = (uid: number) => {
-  return Promise.all([thunkGetCategories(), thunkGetExpenses(uid)]).then(
+  return Promise.all([thunkGetCategories(), listExpense()]).then(
     ([categories, expenses]) => ({
       categories,
       expenses
