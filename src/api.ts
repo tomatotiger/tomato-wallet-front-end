@@ -26,8 +26,15 @@ interface TomatoHttpResponse<T> extends Response {
   parsedBody?: T;
 }
 
-export function thunkGetCategories() {
-  return Promise.resolve(categories);
+export function listCategory(): Promise<Category[]> {
+  return fetch('http://localhost:8000/categories/')
+    .then(resp => {
+      return resp.json();
+    })
+    .then(json => {
+      //TODO: add validation
+      return json.results as Category[];
+    });
 }
 
 export const createExpense = (expense: {
@@ -77,7 +84,7 @@ export const thunkRetrieveExpense = (eid: number) => {
 };
 
 export const thunkGetInitialData = (uid: number) => {
-  return Promise.all([thunkGetCategories(), listExpense()]).then(
+  return Promise.all([listCategory(), listExpense()]).then(
     ([categories, expenses]) => ({
       categories,
       expenses

@@ -29,9 +29,13 @@ interface State {
   loading: boolean;
 }
 
+interface StateProps {
+  categories: string[];
+}
 interface DispatchProps {
   handleAddExpense: ({ amount, category, date }: NewExpense) => void;
 }
+type Props = StateProps & DispatchProps;
 
 const createDefaultState = (): State => {
   const now = new Date();
@@ -43,8 +47,8 @@ const createDefaultState = (): State => {
   };
 };
 
-export class UnconnectedRecordExpense extends Component<DispatchProps, State> {
-  constructor(props: DispatchProps) {
+export class UnconnectedRecordExpense extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = createDefaultState();
   }
@@ -133,7 +137,7 @@ export class UnconnectedRecordExpense extends Component<DispatchProps, State> {
             </span>
           )}
           <Combobox
-            data={['orange', 'red', 'blue', 'purple']}
+            data={this.props.categories}
             placeholder="Category"
             value={category.value}
             onChange={this.categoryOnChange}
@@ -166,8 +170,8 @@ export class UnconnectedRecordExpense extends Component<DispatchProps, State> {
   }
 }
 
-const mapStateToProps = (state: AppState) => ({
-  history: state.expense.expenses
+const mapStateToProps = (state: AppState): StateProps => ({
+  categories: state.category.categories.map(c => c.name)
 });
 
 const thunkAddExpense = (
@@ -180,7 +184,9 @@ const thunkAddExpense = (
   };
 };
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>) => ({
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<{}, {}, any>
+): DispatchProps => ({
   handleAddExpense: (expense: NewExpense) => {
     return dispatch(thunkAddExpense(expense));
   }
