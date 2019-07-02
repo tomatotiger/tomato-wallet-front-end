@@ -10,7 +10,7 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { recordExpense } from '../store/expense/actions';
 import { NewExpense, ExpenseActionTypes } from '../store/expense/types';
 import { AppState } from '../store';
-import { createExpense } from '../api';
+import { createExpense } from '../api/expense';
 import {
   Field,
   defaultField,

@@ -13,7 +13,8 @@ import { ExpenseHistoryState } from './store/expense/types';
 import { Homepage } from './pages/Homepage';
 import { Footer } from './components/Footer';
 import './stylesheets/main.scss';
-import { thunkGetInitialData } from './api';
+import { listExpense } from './api/expense';
+import { listCategory } from './api/category';
 
 interface AppProps {
   auth: AuthState;
@@ -37,10 +38,19 @@ export class UnconnectedApp extends Component<AppProps> {
   }
 }
 
+export const thunkGetInitialData = () => {
+  return Promise.all([listCategory(), listExpense()]).then(
+    ([categories, expenses]) => ({
+      categories,
+      expenses
+    })
+  );
+};
+
 export const handleInitialData = () => (dispatch: Dispatch<AnyAction>) => {
   dispatch(showLoading());
   dispatch(login(1, 'tomato'));
-  return thunkGetInitialData(1).then(({ categories, expenses }) => {
+  return thunkGetInitialData().then(({ categories, expenses }) => {
     dispatch(getCategories(categories));
     dispatch(getExpenses(expenses));
     dispatch(hideLoading());
