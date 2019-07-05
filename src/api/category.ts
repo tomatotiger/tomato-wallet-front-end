@@ -1,5 +1,5 @@
 import { Category } from '../store/category/types';
-import { httpGet, APIResponse } from './client';
+import { httpGet } from './client';
 import { Result } from '../utils/result';
 
 interface CategoryDecodeError {

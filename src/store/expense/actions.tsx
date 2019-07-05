@@ -6,9 +6,9 @@ import {
   UPDATE_EXPENSE,
   DELETE_EXPENSE
 } from './types';
-import { APIResponse } from '../../api/client';
+import { APIResponse } from '../../api/types';
 
-export const gotExpenses = (expensesResult: APIResponse<Expense[], any>) => {
+export const gotExpenses = (expensesResult: APIResponse<Expense[]>) => {
   return {
     type: GET_EXPENSES,
     expensesResult

@@ -1,4 +1,4 @@
-import { APIResponse } from '../../api/client';
+import { APIResponse } from '../../api/types';
 
 export interface Category {
   id: number;
@@ -13,7 +13,7 @@ export const GOT_CATEGORIES = 'GOT_CATEGORIES';
 
 export interface GotCategoriesAction {
   type: typeof GOT_CATEGORIES;
-  categoryResult: APIResponse<Category[], any>;
+  categoryResult: APIResponse<Category[]>;
 }
 
 export type CategoryActionTypes = GotCategoriesAction;

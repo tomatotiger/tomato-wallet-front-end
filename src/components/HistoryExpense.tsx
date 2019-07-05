@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import { Expense } from '../store/expense/types';
 import { AppState } from '../store';
-import { APIResponse } from '../api/client';
+import { APIResponse } from '../api/types';
 
 interface Props {
-  history: APIResponse<Expense[], any>;
+  history: APIResponse<Expense[]>;
 }
 
 export const HistoryExpense: SFC<Props> = props => {

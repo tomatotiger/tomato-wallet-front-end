@@ -1,6 +1,6 @@
 import { Expense } from '../store/expense/types';
 import { Category } from '../store/category/types';
-import { httpGet, APIResponse } from './client';
+import { httpGet } from './client';
 import { Result } from '../utils/result';
 
 export const createExpense = (expense: {

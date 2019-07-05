@@ -8,7 +8,6 @@ import {
   ExpenseActionTypes
 } from './types';
 
-import { APIResponse } from '../../api/client';
 import { Result } from '../../utils/result';
 
 const initialState: ExpenseHistoryState = {
