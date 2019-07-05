@@ -6,11 +6,12 @@ import {
   UPDATE_EXPENSE,
   DELETE_EXPENSE
 } from './types';
+import { APIResponse } from '../../api/client';
 
-export const getExpenses = (expenses: Expense[]) => {
+export const gotExpenses = (expensesResult: APIResponse<Expense[], any>) => {
   return {
     type: GET_EXPENSES,
-    expenses
+    expensesResult
   };
 };
 

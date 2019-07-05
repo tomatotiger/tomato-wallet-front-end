@@ -1,4 +1,5 @@
 import { Category } from '../category/types';
+import { APIResponse } from '../../api/client';
 
 export interface Expense {
   id: number;
@@ -14,7 +15,7 @@ export interface NewExpense {
 }
 
 export interface ExpenseHistoryState {
-  expenses: Expense[];
+  expenses: APIResponse<Expense[], any>;
 }
 
 export const GET_EXPENSES = 'GET_EXPENSES';
@@ -25,7 +26,7 @@ export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 interface GetExpenses {
   type: typeof GET_EXPENSES;
-  expenses: Expense[];
+  expensesResult: APIResponse<Expense[], any>;
 }
 
 interface RecordExpenseAction {

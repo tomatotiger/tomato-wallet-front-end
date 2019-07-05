@@ -1,8 +1,11 @@
-import { Category, GET_CATEGORIES } from './types';
+import { Category, GOT_CATEGORIES, GotCategoriesAction } from './types';
+import { APIResponse } from '../../api/client';
 
-export const getCategories = (categories: Category[]) => {
+export const gotCategories = (
+  categoryResult: APIResponse<Category[], any>
+): GotCategoriesAction => {
   return {
-    type: GET_CATEGORIES,
-    categories
+    type: GOT_CATEGORIES,
+    categoryResult
   };
 };
