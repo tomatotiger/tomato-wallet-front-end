@@ -1,11 +1,15 @@
 import { Category } from '../store/category/types';
-import { httpGet } from './client';
+import { httpGet, APIResponse } from './client';
+import { Result } from '../utils/result';
+
+interface CategoryDecodeError {
+  message: string;
+}
 
 export function listCategory() {
-  return httpGet(
-    'categories/',
-    (json: any): Category[] => {
-      return json.results as Category[];
-    }
-  );
+  const decode = (json: any): Result<Category[], any> => ({
+    success: true,
+    data: json as Category[]
+  });
+  return httpGet('categories/', decode);
 }

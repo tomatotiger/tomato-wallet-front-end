@@ -1,6 +1,7 @@
 import { Expense } from '../store/expense/types';
 import { Category } from '../store/category/types';
-import { httpGet } from './client';
+import { httpGet, APIResponse } from './client';
+import { Result } from '../utils/result';
 
 export const createExpense = (expense: {
   amount: number;
@@ -24,25 +25,26 @@ export const thunkDeleteExpense = (uid: number) => {
 };
 
 export const listExpense = () => {
-  // error handling
-  const validation = (json: any): Expense[] => {
-    return json.results.map(
-      (e: {
-        amount: string;
-        record_time: string;
-        category: Category | null;
-        id: number;
-      }): Expense => ({
-        amount: parseFloat(e.amount),
-        date: new Date(e.record_time),
-        category: e.category,
-        id: e.id
-      })
-    );
-  };
-  return httpGet('expense/', validation);
+  return httpGet(
+    'expense/',
+    (json: any) =>
+    Result.success(
+      json.results.map(
+        (e: {
+          amount: string;
+          record_time: string;
+          category: Category | null;
+          id: number;
+        }): Expense => ({
+          amount: parseFloat(e.amount),
+          date: new Date(e.record_time),
+          category: e.category,
+          id: e.id
+        })
+      )
+    )
+  );
 };
-
 // export const thunkRetrieveExpense = (eid: number) => {
 //   return Promise.resolve(expense);
 // };
