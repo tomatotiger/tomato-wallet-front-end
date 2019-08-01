@@ -4,33 +4,46 @@ import { shallow } from 'enzyme';
 import { HistoryExpense } from './HistoryExpense';
 
 describe('<HistoryExpense />', () => {
-  it("should shows 'now data' when there is no expense history", () => {
-    const wrapper = shallow(<HistoryExpense history={[]} />);
+  it("should shows 'No data' if there is no expense history", () => {
+    const wrapper = shallow(
+      <HistoryExpense history={{ data: [], success: true }} />
+    );
     expect(wrapper.find('span')).toHaveLength(1);
     expect(wrapper.find('span').text()).toEqual('No data');
   });
 
+  it("should shows 'Get data failure.' if request API failed", () => {
+    const wrapper = shallow(
+      <HistoryExpense history={{ data: [], success: false }} />
+    );
+    expect(wrapper.find('span')).toHaveLength(1);
+    expect(wrapper.find('span').text()).toEqual('Get data failure.');
+  });
+
   it('should shows a list of expense history', () => {
-    const history = [
-      {
-        id: 1,
-        amount: 30.11,
-        category: { id: 1, name: 'food' },
-        date: '2019-05-03'
-      },
-      {
-        id: 2,
-        amount: 3.21,
-        category: { id: 1, name: 'sport' },
-        date: '2019-05-02'
-      },
-      {
-        id: 3,
-        amount: 9.0,
-        category: { id: 1, name: 'beauty' },
-        date: '2019-05-02'
-      }
-    ];
+    const history = {
+      success: true,
+      data: [
+        {
+          id: 1,
+          amount: 30.11,
+          category: { id: 1, name: 'food' },
+          date: '2019-05-03'
+        },
+        {
+          id: 2,
+          amount: 3.21,
+          category: { id: 1, name: 'sport' },
+          date: '2019-05-02'
+        },
+        {
+          id: 3,
+          amount: 9.0,
+          category: { id: 1, name: 'beauty' },
+          date: '2019-05-02'
+        }
+      ]
+    };
     const wrapper = shallow(<HistoryExpense history={history} />);
     const ul = wrapper.find('ul.expense-list');
     expect(ul.exists()).toBe(true);
