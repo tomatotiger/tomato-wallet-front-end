@@ -28,19 +28,19 @@ describe('<HistoryExpense />', () => {
           id: 1,
           amount: 30.11,
           category: { id: 1, name: 'food' },
-          date: '2019-05-03'
+          record_date: '2019-05-03'
         },
         {
           id: 2,
           amount: 3.21,
           category: { id: 1, name: 'sport' },
-          date: '2019-05-02'
+          record_date: '2019-05-02'
         },
         {
           id: 3,
           amount: 9.0,
           category: { id: 1, name: 'beauty' },
-          date: '2019-05-02'
+          record_date: '2019-05-02'
         }
       ]
     };
