@@ -7,8 +7,9 @@ import {
   DELETE_EXPENSE
 } from './types';
 import { APIResponse } from '../../api/types';
+import { ListData } from '../types';
 
-export const gotExpenses = (expensesResult: APIResponse<Expense[]>) => {
+export const gotExpenses = (expensesResult: APIResponse<ListData<Expense>>) => {
   return {
     type: GET_EXPENSES,
     expensesResult

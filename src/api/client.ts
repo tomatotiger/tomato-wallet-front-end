@@ -13,12 +13,11 @@ switch (env.NODE_ENV) {
     break;
 }
 
-export const httpGet = async <Data>(
-  endPoint: string,
+const httpRequest = async <Data>(
+  resp: Response,
   decode: (json: any) => Result<Data, Client.DecodeError>
 ): Promise<Client.APIResponse<Data>> => {
   try {
-    const resp: Response = await fetch(APIUrl + endPoint);
     if (resp.status >= 200 && resp.status < 300) {
       try {
         const json: any = await resp.json();
@@ -39,9 +38,21 @@ export const httpGet = async <Data>(
   }
 };
 
-// export const httpPost = async <Data>(
-//   endPoint: string,
-//   formData: Data
-// ): Promise<Client.APIResponse<Data, any>> => {
-//   return <Promise>
-// };
+export async function httpGet<Data>(
+  endPoint: string,
+  decode: (json: any) => Result<Data, Client.DecodeError>
+): Promise<Client.APIResponse<Data>> {
+  return httpRequest(await fetch(APIUrl + endPoint), decode);
+}
+
+export async function httpPost<Data>(
+  endPoint: string,
+  body: FormData,
+  decode: (json: any) => Result<Data, Client.DecodeError>
+): Promise<Client.APIResponse<Data>> {
+  const settings: RequestInit = {
+    method: 'POST',
+    body
+  };
+  return httpRequest(await fetch(APIUrl + endPoint, { ...settings }), decode);
+}

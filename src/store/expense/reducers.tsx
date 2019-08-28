@@ -9,9 +9,10 @@ import {
 } from './types';
 
 import { Result } from '../../utils/result';
+import { initialListData } from '../types';
 
 const initialState: ExpenseHistoryState = {
-  expenses: Result.success([])
+  expenses: Result.success(initialListData())
 };
 
 export const expenseReducer: Reducer<
@@ -25,32 +26,27 @@ export const expenseReducer: Reducer<
         expenses: action.expensesResult
       };
     case RECORD_EXPENSE:
-      return {
-        ...state,
-        expenses: Result.map(state.expenses, data => [...data, action.payload])
-      };
-    case UPDATE_EXPENSE:
-      return {
-        ...state,
-        expenses: Result.map(state.expenses, data =>
-          data.map(e => {
-            if (e.id !== action.payload.id) {
-              return e;
+      if (
+        state.expenses.success &&
+        state.expenses.data.pagination.current === 1
+      ) {
+        return {
+          ...state,
+          expenses: {
+            ...state.expenses,
+            data: {
+              ...state.expenses.data,
+              results: [...state.expenses.data.results, action.payload]
             }
-            return {
-              ...e,
-              ...action.payload
-            };
-          })
-        )
-      };
+          }
+        };
+      } else {
+        return state;
+      }
+    case UPDATE_EXPENSE:
+      return state;
     case DELETE_EXPENSE:
-      return {
-        ...state,
-        expenses: Result.map(state.expenses, data =>
-          data.filter(e => e.id !== action.eid)
-        )
-      };
+      return state;
     default:
       return state;
   }
