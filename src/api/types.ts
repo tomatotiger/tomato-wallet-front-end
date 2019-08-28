@@ -19,7 +19,8 @@ export const wrongTypeField = (fieldName: string): WrongTypeField => ({
 type ErrorField = MissingField | WrongTypeField;
 
 export interface DecodeError {
-  message: ErrorField[];
+  // message: ErrorField[];
+  message: string;
 }
 
 interface NetworkError {
@@ -56,6 +57,20 @@ export const badSchema = (error: DecodeError): BadSchema => ({
   error
 });
 
-type APIError = NetworkError | BadStatus | BadBody | BadSchema;
+export type APIError = NetworkError | BadStatus | BadBody | BadSchema;
 
 export type APIResponse<Data> = Result<Data, APIError>;
+
+export interface ListResponseData<Data> {
+  count: number;
+  next: URL | null;
+  previous: URL | null;
+  results: Data[];
+}
+
+export const initialListReponseData = (): ListResponseData<any> => ({
+  count: 0,
+  next: null,
+  previous: null,
+  results: []
+});
