@@ -60,7 +60,7 @@ export const buildUrlWithParams = (
   }
 };
 
-export const parseUrlPraams = (url: string): { [s: string]: string } => {
+export const parseUrlParams = (url: string): { [s: string]: string } => {
   let u = url || location.href;
   u = u.trim().replace(/^[?#&]/, '');
 
@@ -69,7 +69,8 @@ export const parseUrlPraams = (url: string): { [s: string]: string } => {
   }
 
   let params: { [s: string]: string } = {};
-  for (const param of u.split('&')) {
+  const paramsString = u.split('?')[1];
+  for (const param of paramsString.split('&')) {
     let [key, value] = param.replace(/\+/g, ' ').split('=');
     if (key && value) {
       params[key] = encodeURIComponent(value);

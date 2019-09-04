@@ -1,4 +1,9 @@
-import { buildUrlWithParams, isEmptyString, isEmptyObject } from './helper';
+import {
+  buildUrlWithParams,
+  parseUrlParams,
+  isEmptyString,
+  isEmptyObject
+} from './helper';
 
 describe('isEmptyString', () => {
   it('should return true if pass 1 or 1+ spaces, null or undefined', () => {
@@ -32,5 +37,12 @@ describe('buildUrlWithParams', () => {
     const url = 'www.xxx.com';
     const params = {};
     expect(buildUrlWithParams(url, params)).toEqual('www.xxx.com');
+  });
+});
+
+describe('parseUrlParams', () => {
+  const url = 'http://localhost:8000/expense/?page=2';
+  it('should return {"page": "2"} if pass url below', () => {
+    expect(parseUrlParams(url)).toEqual({ page: '2' });
   });
 });
