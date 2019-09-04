@@ -1,8 +1,12 @@
 import { Reducer } from 'redux';
+import { Result } from '../../utils/result';
 import { CategoryState, GOT_CATEGORIES, CategoryActionTypes } from './types';
+import { RECORD_EXPENSE } from '../expense/types';
+
+import { initialListData } from '../types';
 
 const initialState: CategoryState = {
-  categories: []
+  categories: Result.success(initialListData())
 };
 
 export const categoryReducer: Reducer<CategoryState, CategoryActionTypes> = (
@@ -13,7 +17,7 @@ export const categoryReducer: Reducer<CategoryState, CategoryActionTypes> = (
     case GOT_CATEGORIES:
       return {
         ...state,
-        categoryResult: action.categoryResult
+        categories: action.categoryResult
       };
     default:
       return state;
