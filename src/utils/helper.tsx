@@ -10,14 +10,12 @@ export const getInputProps = (wrapper: ShallowWrapper, selector: string) => {
   return input.props();
 };
 
-export const isEmpty = (s?: string | null) => {
-  if (s === undefined) {
-    return true;
-  } else if (s === null) {
-    return true;
-  } else {
-    return s.trim() === '';
-  }
+export const isEmptyString = (s?: string | null) => {
+  return (!s || s.trim() === '') === true ? true : false;
+};
+
+export const isEmptyObject = (d?: { [s: string]: any } | null) => {
+  return (!d || Object.keys(d).length < 1) === true ? true : false;
 };
 
 export const compareTwoArraies = (arr1: any[], arr2: any[]) => {
@@ -40,3 +38,43 @@ export const compareTwoArraies = (arr1: any[], arr2: any[]) => {
 };
 
 export const assertExhaustiveSwitch = (arg: never) => undefined;
+
+export const formatDatetime = (date: Date): string =>
+  date
+    ? `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`
+    : '';
+
+export const buildUrlWithParams = (
+  url: string,
+  params: { [s: string]: string | number | Date }
+) => {
+  if (isEmptyObject(params)) {
+    return url;
+  } else {
+    let paramsArray: string[] = [];
+    let finalUrl = url;
+    Object.keys(params).forEach(key =>
+      paramsArray.push(key + '=' + params[key])
+    );
+    return finalUrl + '?' + paramsArray.join('&');
+  }
+};
+
+export const parseUrlParams = (url: string): { [s: string]: string } => {
+  let u = url || location.href;
+  u = u.trim().replace(/^[?#&]/, '');
+
+  if (!u) {
+    return {};
+  }
+
+  let params: { [s: string]: string } = {};
+  const paramsString = u.split('?')[1];
+  for (const param of paramsString.split('&')) {
+    let [key, value] = param.replace(/\+/g, ' ').split('=');
+    if (key && value) {
+      params[key] = encodeURIComponent(value);
+    }
+  }
+  return params;
+};

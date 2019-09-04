@@ -1,15 +1,17 @@
-import { Category } from '../store/category/types';
-import { httpGet } from './client';
-import { Result } from '../utils/result';
+import { Category, schema } from '../store/category/types';
+import { buildUrlWithParams } from '../utils/helper';
+
+import * as Request from './client';
+import * as Decoder from './decoder';
 
 interface CategoryDecodeError {
   message: string;
 }
 
-export function listCategory() {
-  const decode = (json: any): Result<Category[], any> => ({
-    success: true,
-    data: json as Category[]
-  });
-  return httpGet('categories/', decode);
-}
+export const listCategory = (page: number = 1) => {
+  const url = buildUrlWithParams('category/', { page });
+  return Request.httpGet(
+    url,
+    Decoder.listField<Category>(Decoder.objectField<Category>(schema))
+  );
+};

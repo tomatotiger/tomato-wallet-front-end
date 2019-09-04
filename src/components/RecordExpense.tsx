@@ -8,8 +8,14 @@ import momentLocalizer from 'react-widgets-moment';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
 import { recordExpense } from '../store/expense/actions';
-import { NewExpense, ExpenseActionTypes } from '../store/expense/types';
+import {
+  NewExpense,
+  Expense,
+  ExpenseActionTypes
+} from '../store/expense/types';
 import { AppState } from '../store';
+import { Result } from '../utils/result';
+import * as Client from '../api/types';
 import { createExpense } from '../api/expense';
 import {
   Field,
@@ -22,18 +28,36 @@ import {
 Moment.locale('en');
 momentLocalizer();
 
+interface SubmitInitial {
+  state: 'initial';
+}
+
+interface SubmitSucceed {
+  state: 'succeed';
+  message: string;
+}
+
+interface Submitting {
+  state: 'submitting';
+}
+
+interface SubmitFailed {
+  state: 'failed';
+  message: string;
+}
+
 interface State {
   amount: Field<string, number>;
   category: Field<string, string>;
-  date: Field<Date | undefined, Date>;
-  loading: boolean;
+  recordTime: Field<Date | undefined, Date>;
+  submitState: SubmitInitial | Submitting | SubmitSucceed | SubmitFailed;
 }
 
 interface StateProps {
   categories: string[];
 }
 interface DispatchProps {
-  handleAddExpense: ({ amount, category, date }: NewExpense) => void;
+  handleAddExpense: (e: NewExpense) => any;
 }
 type Props = StateProps & DispatchProps;
 
@@ -42,8 +66,8 @@ const createDefaultState = (): State => {
   return {
     amount: defaultField('0'),
     category: defaultField(''),
-    date: validField(now, now),
-    loading: false
+    recordTime: validField(now, now),
+    submitState: { state: 'initial' }
   };
 };
 
@@ -58,25 +82,36 @@ export class UnconnectedRecordExpense extends Component<Props, State> {
   };
 
   disabled = () => {
-    return !this.stateValid() && !this.state.loading;
+    return !this.stateValid() || this.state.submitState.state === 'submitting';
   };
 
   stateValid = () => {
-    const { amount, category, date } = this.state;
-    return isValid(amount) && isValid(category) && isValid(date);
+    const { amount, category, recordTime } = this.state;
+    return isValid(amount) && isValid(category) && isValid(recordTime);
   };
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    this.setState({ loading: true });
+    this.setState({ submitState: { state: 'submitting' } });
     e.preventDefault();
-    const { amount, category, date } = this.state;
-    if (isValid(amount) && isValid(category) && isValid(date)) {
-      this.props.handleAddExpense({
-        amount: amount.validatedValue,
-        category: category.validatedValue,
-        date: date.validatedValue
-      });
-      this.setDefaultState();
+    const { amount, category, recordTime } = this.state;
+    if (isValid(amount) && isValid(category) && isValid(recordTime)) {
+      this.props
+        .handleAddExpense({
+          amount: amount.validatedValue,
+          categoryName: category.validatedValue,
+          recordTime: recordTime.validatedValue
+        })
+        .then((r: Result<Expense, Client.APIError>) => {
+          if (r.success) {
+            this.setState({
+              submitState: { state: 'succeed', message: 'add record succeed.' }
+            });
+          } else {
+            this.setState({
+              submitState: { state: 'failed', message: r.error.kind }
+            });
+          }
+        });
     }
   };
 
@@ -99,9 +134,9 @@ export class UnconnectedRecordExpense extends Component<Props, State> {
 
   dateOnChange = (value?: Date): void => {
     if (value) {
-      this.setState({ date: validField(value, value) });
+      this.setState({ recordTime: validField(value, value) });
     } else {
-      this.setState({ date: invalidField(value, 'please input a valid date') });
+      this.setState({ recordTime: invalidField(value, 'please input a valid date') });
     }
   };
 
@@ -116,7 +151,7 @@ export class UnconnectedRecordExpense extends Component<Props, State> {
   };
 
   render() {
-    const { amount, category, date } = this.state;
+    const { amount, category, recordTime, submitState } = this.state;
     return (
       <div className="record-expense">
         <form className="record" onSubmit={this.handleSubmit}>
@@ -148,15 +183,16 @@ export class UnconnectedRecordExpense extends Component<Props, State> {
             </span>
           )}
           <DateTimePicker
-            value={date.value}
+            value={recordTime.value}
             format="YYYY-MM-DD HH:mm:ss"
             onChange={this.dateOnChange}
           />
-          {date.state === 'invalid' && (
+          {recordTime.state === 'invalid' && (
             <span className="error-message" id="date-message">
-              {date.error}
+              {recordTime.error}
             </span>
           )}
+
           <input
             name="submit"
             className="submit"
@@ -164,6 +200,18 @@ export class UnconnectedRecordExpense extends Component<Props, State> {
             value="RECORD"
             disabled={this.disabled()}
           />
+
+          {submitState.state === 'succeed' && (
+            <span className="message" id="submit-message">
+              {submitState.message}
+            </span>
+          )}
+
+          {submitState.state === 'failed' && (
+            <span className="error-message" id="submit-message">
+              {submitState.message}
+            </span>
+          )}
         </form>
       </div>
     );
@@ -171,15 +219,18 @@ export class UnconnectedRecordExpense extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: AppState): StateProps => ({
-  categories: state.category.categories.map(c => c.name)
+  categories: []
 });
 
 const thunkAddExpense = (
   expense: NewExpense
-): ThunkAction<Promise<void>, {}, {}, ExpenseActionTypes> => {
-  return (dispatch: ThunkDispatch<{}, {}, any>): Promise<void> => {
-    return createExpense(expense).then(e => {
-      dispatch(recordExpense(e));
+): ThunkAction<Promise<any>, {}, {}, ExpenseActionTypes> => {
+  return (dispatch: ThunkDispatch<{}, {}, any>): Promise<any> => {
+    return createExpense(expense).then(r => {
+      if (r.success) {
+        dispatch(recordExpense(r.data));
+      }
+      return r;
     });
   };
 };
@@ -187,8 +238,8 @@ const thunkAddExpense = (
 const mapDispatchToProps = (
   dispatch: ThunkDispatch<{}, {}, any>
 ): DispatchProps => ({
-  handleAddExpense: (expense: NewExpense) => {
-    return dispatch(thunkAddExpense(expense));
+  handleAddExpense: (e: NewExpense) => {
+    return dispatch(thunkAddExpense(e));
   }
 });
 
