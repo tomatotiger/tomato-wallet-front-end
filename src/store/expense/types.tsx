@@ -1,12 +1,13 @@
-import { Category } from '../category/types';
-import { APIResponse } from '../../api/types';
+import * as Category from '../category/types';
+import { APIResponse, Schema } from '../../api/types';
 import { ListData } from '../types';
+import * as Decoder from '../../api/decoder';
 
 export interface Expense {
   id: number;
   amount: string;
   recordTime: Date;
-  category: Category | null;
+  category: Category.Category | null;
 }
 
 export interface NewExpense {
@@ -14,6 +15,16 @@ export interface NewExpense {
   recordTime: Date;
   categoryName: string;
 }
+
+export const schema: Schema = {
+  id: { field: Decoder.numberField, apiName: 'id' },
+  amount: { field: Decoder.numberField, apiName: 'amount' },
+  recordTime: { field: Decoder.dateField, apiName: 'record_time' },
+  category: {
+    field: Decoder.objectField<Category.Category>(Category.schema),
+    apiName: 'category'
+  }
+};
 
 export interface ExpenseHistoryState {
   expenses: APIResponse<ListData<Expense>>;

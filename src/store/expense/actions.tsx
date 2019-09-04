@@ -1,6 +1,5 @@
 import {
   Expense,
-  NewExpense,
   GET_EXPENSES,
   RECORD_EXPENSE,
   UPDATE_EXPENSE,

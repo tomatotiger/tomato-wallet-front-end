@@ -15,7 +15,7 @@ switch (env.NODE_ENV) {
 
 const httpRequest = async <Data>(
   resp: Response,
-  decode: (json: any) => Result<Data, Client.DecodeError>
+  decode: Client.ObjectDecoder<Data>
 ): Promise<Client.APIResponse<Data>> => {
   try {
     if (resp.status >= 200 && resp.status < 300) {
@@ -40,7 +40,7 @@ const httpRequest = async <Data>(
 
 export async function httpGet<Data>(
   endPoint: string,
-  decode: (json: any) => Result<Data, Client.DecodeError>
+  decode: Client.ObjectDecoder<Data>
 ): Promise<Client.APIResponse<Data>> {
   return httpRequest(await fetch(APIUrl + endPoint), decode);
 }
@@ -48,7 +48,7 @@ export async function httpGet<Data>(
 export async function httpPost<Data>(
   endPoint: string,
   body: FormData,
-  decode: (json: any) => Result<Data, Client.DecodeError>
+  decode: Client.ObjectDecoder<Data>
 ): Promise<Client.APIResponse<Data>> {
   const settings: RequestInit = {
     method: 'POST',
