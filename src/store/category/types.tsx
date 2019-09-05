@@ -14,14 +14,14 @@ export const schema: Schema = {
 };
 
 export interface CategoryState {
-  categories: APIResponse<ListData<Category>>;
+  categories: APIResponse<ListData<Category>, any>;
 }
 
 export const GOT_CATEGORIES = 'GOT_CATEGORIES';
 
 export interface GotCategoriesAction {
   type: typeof GOT_CATEGORIES;
-  categoryResult: APIResponse<ListData<Category>>;
+  categoryResult: APIResponse<ListData<Category>, any>;
 }
 
 export type CategoryActionTypes = GotCategoriesAction | RecordExpenseAction;

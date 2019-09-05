@@ -101,7 +101,7 @@ export class UnconnectedRecordExpense extends Component<Props, State> {
           categoryName: category.validatedValue,
           recordTime: recordTime.validatedValue
         })
-        .then((r: Result<Expense, Client.APIError>) => {
+        .then((r: Result<Expense, Client.APIError<any>>) => {
           if (r.success) {
             this.setState({
               submitState: { state: 'succeed', message: 'add record succeed.' }

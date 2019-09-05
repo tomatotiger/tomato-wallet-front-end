@@ -13,10 +13,10 @@ switch (env.NODE_ENV) {
     break;
 }
 
-const httpRequest = async <Data>(
+const httpRequest = async <Data, Err>(
   resp: Response,
-  decode: Client.ObjectDecoder<Data>
-): Promise<Client.APIResponse<Data>> => {
+  decode: Client.Decoder<Data, Err>
+): Promise<Client.APIResponse<Data, Err>> => {
   try {
     if (resp.status >= 200 && resp.status < 300) {
       try {
@@ -38,18 +38,18 @@ const httpRequest = async <Data>(
   }
 };
 
-export async function httpGet<Data>(
+export async function httpGet<Data, Err>(
   endPoint: string,
-  decode: Client.ObjectDecoder<Data>
-): Promise<Client.APIResponse<Data>> {
+  decode: Client.Decoder<Data, Err>
+) {
   return httpRequest(await fetch(APIUrl + endPoint), decode);
 }
 
-export async function httpPost<Data>(
+export async function httpPost<Data, Err>(
   endPoint: string,
   body: FormData,
-  decode: Client.ObjectDecoder<Data>
-): Promise<Client.APIResponse<Data>> {
+  decode: Client.Decoder<Data, Err>
+) {
   const settings: RequestInit = {
     method: 'POST',
     body

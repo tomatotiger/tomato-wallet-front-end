@@ -8,7 +8,7 @@ import {
 import { APIResponse } from '../../api/types';
 import { ListData } from '../types';
 
-export const gotExpenses = (expensesResult: APIResponse<ListData<Expense>>) => {
+export const gotExpenses = (expensesResult: APIResponse<ListData<Expense>, any>) => {
   return {
     type: GET_EXPENSES,
     expensesResult

@@ -18,12 +18,8 @@ export const wrongTypeField = (fieldName: string): WrongTypeField => ({
 });
 type ErrorField = MissingField | WrongTypeField;
 
-export interface DecodeError {
+export interface SimpleDecodeError {
   message: string;
-}
-
-export interface SimpoleDecodeError {
-  [field: string]: string;
 }
 
 export interface ObjectDecodeError {
@@ -44,9 +40,9 @@ interface BadBody {
   response: Response;
 }
 
-interface BadSchema {
+interface BadSchema<DecodeError> {
   kind: 'BadSchema';
-  error: ObjectDecodeError;
+  error: DecodeError;
 }
 //TODO: extra error: Timeout, BadBody, BadUrl
 
@@ -59,22 +55,29 @@ export const badBody = (response: Response): BadBody => ({
   kind: 'BadBody',
   response
 });
-export const badSchema = (error: ObjectDecodeError): BadSchema => ({
+export const badSchema = <DecodeError>(
+  error: DecodeError
+): BadSchema<DecodeError> => ({
   kind: 'BadSchema',
   error
 });
 
-export type APIError = NetworkError | BadStatus | BadBody | BadSchema;
+export type APIError<DecodeError> =
+  | NetworkError
+  | BadStatus
+  | BadBody
+  | BadSchema<DecodeError>;
 
-export type APIResponse<Data> = Result<Data, APIError>;
+export type APIResponse<Data, DecodeError> = Result<
+  Data,
+  APIError<DecodeError>
+>;
 
-export type Decoder<Data> = (json: any) => Result<Data, DecodeError>;
-export type SimpleDecoder<Data> = (
+export type Decoder<Data, DecodeError> = (
   json: any
-) => Result<Data, SimpoleDecodeError>;
-export type ObjectDecoder<Data> = (
-  json: any
-) => Result<Data, ObjectDecodeError>;
+) => Result<Data, DecodeError>;
+export type SimpleDecoder<Data> = Decoder<Data, SimpleDecodeError>;
+export type ObjectDecoder<Data> = Decoder<Data, ObjectDecodeError>;
 
 export interface Schema {
   [fieldName: string]: {

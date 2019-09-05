@@ -79,7 +79,7 @@ export function listField<Item>(
 
 export const numberField: SimpleDecoder<number> = (
   raw: any
-): Result<number, Client.SimpoleDecodeError> => {
+): Result<number, Client.SimpleDecodeError> => {
   const n = Number(raw);
   if (isNaN(n)) {
     return Result.failure({ message: `${raw} is not a number` });
@@ -90,7 +90,7 @@ export const numberField: SimpleDecoder<number> = (
 
 export const dateField: SimpleDecoder<Date> = (
   raw: any
-): Result<Date, Client.SimpoleDecodeError> => {
+): Result<Date, Client.SimpleDecodeError> => {
   const timestamp = Date.parse(raw);
   if (isNaN(timestamp)) {
     return Result.failure({ message: `${raw} is not a valid date` });
@@ -101,7 +101,7 @@ export const dateField: SimpleDecoder<Date> = (
 
 export const stringField: SimpleDecoder<string> = (
   raw: any
-): Result<string, Client.SimpoleDecodeError> => {
+): Result<string, Client.SimpleDecodeError> => {
   if (typeof raw === 'string') {
     return Result.success(raw);
   } else {

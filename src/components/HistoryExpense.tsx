@@ -8,7 +8,7 @@ import { formatDatetime } from '../utils/helper';
 import { ListData } from '../store/types';
 
 interface Props {
-  history: APIResponse<ListData<Expense>>;
+  history: APIResponse<ListData<Expense>, any>;
 }
 
 export const HistoryExpense: SFC<Props> = props => {

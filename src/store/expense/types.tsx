@@ -27,7 +27,7 @@ export const schema: Schema = {
 };
 
 export interface ExpenseHistoryState {
-  expenses: APIResponse<ListData<Expense>>;
+  expenses: APIResponse<ListData<Expense>, any>;
 }
 
 export const GET_EXPENSES = 'GET_EXPENSES';
@@ -38,7 +38,7 @@ export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 interface GetExpenses {
   type: typeof GET_EXPENSES;
-  expensesResult: APIResponse<ListData<Expense>>;
+  expensesResult: APIResponse<ListData<Expense>, any>;
 }
 
 export interface RecordExpenseAction {
