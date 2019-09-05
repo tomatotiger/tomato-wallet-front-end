@@ -1,7 +1,7 @@
 import { APIResponse, Schema } from '../../api/types';
 import { RecordExpenseAction } from '../expense/types';
 import * as Decoder from '../../api/decoder';
-import { ListData } from '../types';
+import { PaginateArrayData } from '../types';
 
 export interface Category {
   id: number;
@@ -14,14 +14,14 @@ export const schema: Schema = {
 };
 
 export interface CategoryState {
-  categories: APIResponse<ListData<Category>, any>;
+  categories: APIResponse<PaginateArrayData<Category>, any>;
 }
 
 export const GOT_CATEGORIES = 'GOT_CATEGORIES';
 
 export interface GotCategoriesAction {
   type: typeof GOT_CATEGORIES;
-  categoryResult: APIResponse<ListData<Category>, any>;
+  categoryResult: APIResponse<PaginateArrayData<Category>, any>;
 }
 
 export type CategoryActionTypes = GotCategoriesAction | RecordExpenseAction;

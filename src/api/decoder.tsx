@@ -2,21 +2,21 @@ import { Result } from '../utils/result';
 import * as Client from './types';
 import { Category } from '../store/category/types';
 import { Expense } from '../store/expense/types';
-import { ListData } from '../store/types';
+import { PaginateArrayData } from '../store/types';
 import { parseUrlParams } from '../utils/helper';
-import { SimpleDecoder, ObjectDecoder, Schema } from './types';
+import { SimpleDecoder, ObjectDecoder, ArrayDecoder, Schema } from './types';
 
 export function objectField<Data>(schema: Schema): ObjectDecoder<Data> {
-  return (raw: any): Result<Data, Client.ObjectDecodeError> => {
-    if (raw == null || raw.constructor.name !== 'Object') {
+  return (json: any): Result<Data, Client.ObjectDecodeError> => {
+    if (json == null || json.constructor.name !== 'Object') {
       return Result.failure({ '.': 'Decode error: wrong constructor.' });
     }
     let data: { [s: string]: any } = {};
     let errors: Client.ObjectDecodeError = {};
     Object.keys(schema).forEach(k => {
       const { apiName, field } = schema[k];
-      if (apiName in raw) {
-        const result = field(raw[apiName]);
+      if (apiName in json) {
+        const result = field(json[apiName]);
         if (result.success) {
           data[k] = result.data;
         } else {
@@ -34,10 +34,41 @@ export function objectField<Data>(schema: Schema): ObjectDecoder<Data> {
   };
 }
 
+export function arrayField<Item>(
+  itemDecoder: ObjectDecoder<Item>,
+  tolerant: boolean = true
+): ArrayDecoder<Item> {
+  // TODO: if tolerant is true, return Success Result even some item got decode error.
+  return (json: any): Result<Item[], Client.ArrayDecodeError> => {
+    if (json == null || json.constructor.name !== 'Array') {
+      return Result.failure({
+        message: 'Decode error: wrong constructor of response data.'
+      });
+    } else {
+      let data: Item[] = [];
+      let errors: Client.ObjectDecodeError[] = [];
+      json.forEach((row: any) => {
+        const result = itemDecoder(row);
+        result.success === true
+          ? data.push(result.data as Item)
+          : errors.push(result.error);
+      });
+
+      if (tolerant === false && errors.length > 0) {
+        return Result.failure({ message: 'Item decode error.', errors });
+      } else {
+        return Result.success(data);
+      }
+    }
+  };
+}
+
 export function listField<Item>(
   itemDecoder: ObjectDecoder<Item>
-): ObjectDecoder<ListData<Item>> {
-  return (json: any): Result<ListData<Item>, Client.ObjectDecodeError> => {
+): ObjectDecoder<PaginateArrayData<Item>> {
+  return (
+    json: any
+  ): Result<PaginateArrayData<Item>, Client.ObjectDecodeError> => {
     // check constructor
     if (json == null || json.constructor.name !== 'Object') {
       return Result.failure({
@@ -78,37 +109,37 @@ export function listField<Item>(
 }
 
 export const numberField: SimpleDecoder<number> = (
-  raw: any
+  json: any
 ): Result<number, Client.SimpleDecodeError> => {
-  const n = Number(raw);
+  const n = Number(json);
   if (isNaN(n)) {
-    return Result.failure({ message: `${raw} is not a number` });
+    return Result.failure({ message: `${json} is not a number` });
   } else {
     return Result.success(n);
   }
 };
 
 export const dateField: SimpleDecoder<Date> = (
-  raw: any
+  json: any
 ): Result<Date, Client.SimpleDecodeError> => {
-  const timestamp = Date.parse(raw);
+  const timestamp = Date.parse(json);
   if (isNaN(timestamp)) {
-    return Result.failure({ message: `${raw} is not a valid date` });
+    return Result.failure({ message: `${json} is not a valid date` });
   } else {
     return Result.success(new Date(timestamp));
   }
 };
 
 export const stringField: SimpleDecoder<string> = (
-  raw: any
+  json: any
 ): Result<string, Client.SimpleDecodeError> => {
-  if (typeof raw === 'string') {
-    return Result.success(raw);
+  if (typeof json === 'string') {
+    return Result.success(json);
   } else {
-    if ('toString' in raw) {
-      return Result.success(raw.toString());
+    if ('toString' in json) {
+      return Result.success(json.toString());
     } else {
-      return Result.failure({ message: `${raw} is not a string` });
+      return Result.failure({ message: `${json} is not a string` });
     }
   }
 };

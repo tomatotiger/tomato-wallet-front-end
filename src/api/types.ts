@@ -1,4 +1,5 @@
 import { Result } from '../utils/result';
+import { PaginateArrayData } from '../store/types';
 
 interface MissingField {
   kind: 'missing';
@@ -24,6 +25,11 @@ export interface SimpleDecodeError {
 
 export interface ObjectDecodeError {
   [field: string]: string;
+}
+
+export interface ArrayDecodeError {
+  message: string;
+  errors?: ObjectDecodeError[];
 }
 
 interface NetworkError {
@@ -78,6 +84,7 @@ export type Decoder<Data, DecodeError> = (
 ) => Result<Data, DecodeError>;
 export type SimpleDecoder<Data> = Decoder<Data, SimpleDecodeError>;
 export type ObjectDecoder<Data> = Decoder<Data, ObjectDecodeError>;
+export type ArrayDecoder<Data> = Decoder<Data[], ArrayDecodeError>;
 
 export interface Schema {
   [fieldName: string]: {

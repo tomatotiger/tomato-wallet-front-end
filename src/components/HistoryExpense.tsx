@@ -5,10 +5,10 @@ import { Expense } from '../store/expense/types';
 import { AppState } from '../store';
 import { APIResponse } from '../api/types';
 import { formatDatetime } from '../utils/helper';
-import { ListData } from '../store/types';
+import { PaginateArrayData } from '../store/types';
 
 interface Props {
-  history: APIResponse<ListData<Expense>, any>;
+  history: APIResponse<PaginateArrayData<Expense>, any>;
 }
 
 export const HistoryExpense: SFC<Props> = props => {
