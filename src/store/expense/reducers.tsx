@@ -8,8 +8,11 @@ import {
   ExpenseActionTypes
 } from './types';
 
+import { Result } from '../../utils/result';
+import { initialListData } from '../types';
+
 const initialState: ExpenseHistoryState = {
-  expenses: []
+  expenses: Result.success(initialListData())
 };
 
 export const expenseReducer: Reducer<
@@ -20,30 +23,30 @@ export const expenseReducer: Reducer<
     case GET_EXPENSES:
       return {
         ...state,
-        expenses: action.expenses
+        expenses: action.expensesResult
       };
     case RECORD_EXPENSE:
-      return {
-        ...state,
-        expenses: [...state.expenses, action.payload]
-      };
-    case UPDATE_EXPENSE:
-      return {
-        ...state,
-        expenses: state.expenses.map(e => {
-          if (e.id !== action.payload.id) {
-            return e;
+      if (
+        state.expenses.success &&
+        state.expenses.data.pagination.current === 1
+      ) {
+        return {
+          ...state,
+          expenses: {
+            ...state.expenses,
+            data: {
+              ...state.expenses.data,
+              results: [...state.expenses.data.results, action.payload]
+            }
           }
-          return {
-            ...e,
-            ...action.payload
-          };
-        })
-      };
+        };
+      } else {
+        return state;
+      }
+    case UPDATE_EXPENSE:
+      return state;
     case DELETE_EXPENSE:
-      return {
-        expenses: state.expenses.filter(e => e.id !== action.eid)
-      };
+      return state;
     default:
       return state;
   }

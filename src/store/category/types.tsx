@@ -1,17 +1,27 @@
+import { APIResponse, Schema } from '../../api/types';
+import { RecordExpenseAction } from '../expense/types';
+import * as Decoder from '../../api/decoder';
+import { ListData } from '../types';
+
 export interface Category {
   id: number;
   name: string;
 }
 
+export const schema: Schema = {
+  id: { field: Decoder.numberField, apiName: 'id' },
+  name: { field: Decoder.stringField, apiName: 'name' }
+};
+
 export interface CategoryState {
-  categories: Category[];
+  categories: APIResponse<ListData<Category>, any>;
 }
 
-export const GET_CATEGORIES = 'GET_CATEGORIES';
+export const GOT_CATEGORIES = 'GOT_CATEGORIES';
 
-interface GetCategoriesAction {
-  type: typeof GET_CATEGORIES;
-  categories: Category[];
+export interface GotCategoriesAction {
+  type: typeof GOT_CATEGORIES;
+  categoryResult: APIResponse<ListData<Category>, any>;
 }
 
-export type CategoryActionTypes = GetCategoriesAction;
+export type CategoryActionTypes = GotCategoriesAction | RecordExpenseAction;

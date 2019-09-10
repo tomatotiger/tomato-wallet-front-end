@@ -3,23 +3,34 @@ import { connect } from 'react-redux';
 
 import { Expense } from '../store/expense/types';
 import { AppState } from '../store';
+import { APIResponse } from '../api/types';
+import { formatDatetime } from '../utils/helper';
+import { ListData } from '../store/types';
 
 interface Props {
-  history: Expense[];
+  history: APIResponse<ListData<Expense>, any>;
 }
 
 export const HistoryExpense: SFC<Props> = props => {
-  return props.history.length < 1 ? (
-    <span>No data</span>
-  ) : (
-    <ul className="expense-list">
-      {props.history.map(expense => (
-        <li key={expense.id}>
-          {expense.amount.toFixed(2)} - {expense.category.name} - {expense.date.toString()}
-        </li>
-      ))}
-    </ul>
-  );
+  if (props.history.success) {
+    return props.history.data.results.length < 1 ? (
+      <span>No data</span>
+    ) : (
+      <ul className="expense-list">
+        {props.history.data.results.map(expense => (
+          <li key={expense.id}>
+            {expense.amount}
+            {expense.category == null
+              ? ''
+              : ' - ' + expense.category.name} -{' '}
+            {formatDatetime(expense.recordTime)}
+          </li>
+        ))}
+      </ul>
+    );
+  } else {
+    return <span>Get data failure.</span>;
+  }
 };
 
 const mapStateToProps = (state: AppState) => ({

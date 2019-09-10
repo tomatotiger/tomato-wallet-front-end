@@ -1,16 +1,17 @@
 import {
   Expense,
-  NewExpense,
   GET_EXPENSES,
   RECORD_EXPENSE,
   UPDATE_EXPENSE,
   DELETE_EXPENSE
 } from './types';
+import { APIResponse } from '../../api/types';
+import { ListData } from '../types';
 
-export const getExpenses = (expenses: Expense[]) => {
+export const gotExpenses = (expensesResult: APIResponse<ListData<Expense>, any>) => {
   return {
     type: GET_EXPENSES,
-    expenses
+    expensesResult
   };
 };
 

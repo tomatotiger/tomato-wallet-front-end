@@ -1,20 +1,33 @@
-import { Category } from '../category/types';
+import * as Category from '../category/types';
+import { APIResponse, Schema } from '../../api/types';
+import { ListData } from '../types';
+import * as Decoder from '../../api/decoder';
 
 export interface Expense {
   id: number;
-  amount: number;
-  date: Date;
-  category: Category;
+  amount: string;
+  recordTime: Date;
+  category: Category.Category | null;
 }
 
 export interface NewExpense {
   amount: number;
-  date: Date;
-  category: string;
+  recordTime: Date;
+  categoryName: string;
 }
 
+export const schema: Schema = {
+  id: { field: Decoder.numberField, apiName: 'id' },
+  amount: { field: Decoder.numberField, apiName: 'amount' },
+  recordTime: { field: Decoder.dateField, apiName: 'record_time' },
+  category: {
+    field: Decoder.objectField<Category.Category>(Category.schema),
+    apiName: 'category'
+  }
+};
+
 export interface ExpenseHistoryState {
-  expenses: Expense[];
+  expenses: APIResponse<ListData<Expense>, any>;
 }
 
 export const GET_EXPENSES = 'GET_EXPENSES';
@@ -25,10 +38,10 @@ export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 interface GetExpenses {
   type: typeof GET_EXPENSES;
-  expenses: Expense[];
+  expensesResult: APIResponse<ListData<Expense>, any>;
 }
 
-interface RecordExpenseAction {
+export interface RecordExpenseAction {
   type: typeof RECORD_EXPENSE;
   payload: Expense;
 }

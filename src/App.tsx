@@ -5,15 +5,16 @@ import { showLoading, hideLoading } from 'react-redux-loading';
 
 import { AppState } from './store';
 import { login } from './store/auth/actions';
-import { getCategories } from './store/category/actions';
-import { getExpenses } from './store/expense/actions';
+import { gotCategories } from './store/category/actions';
+import { gotExpenses } from './store/expense/actions';
 import { AuthState } from './store/auth/types';
 import { CategoryState } from './store/category/types';
 import { ExpenseHistoryState } from './store/expense/types';
 import { Homepage } from './pages/Homepage';
 import { Footer } from './components/Footer';
 import './stylesheets/main.scss';
-import { thunkGetInitialData } from './api';
+import { listExpense } from './api/expense';
+import { listCategory } from './api/category';
 
 interface AppProps {
   auth: AuthState;
@@ -40,11 +41,14 @@ export class UnconnectedApp extends Component<AppProps> {
 export const handleInitialData = () => (dispatch: Dispatch<AnyAction>) => {
   dispatch(showLoading());
   dispatch(login(1, 'tomato'));
-  return thunkGetInitialData(1).then(({ categories, expenses }) => {
-    dispatch(getCategories(categories));
-    dispatch(getExpenses(expenses));
-    dispatch(hideLoading());
-  });
+
+  return Promise.all([listCategory(), listExpense()]).then(
+    ([categoryResult, expensesResult]) => {
+      dispatch(gotCategories(categoryResult));
+      dispatch(gotExpenses(expensesResult));
+      dispatch(hideLoading());
+    }
+  );
 };
 
 const mapStateToProps = (state: AppState) => ({

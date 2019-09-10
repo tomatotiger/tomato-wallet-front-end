@@ -1,8 +1,12 @@
 import { Reducer } from 'redux';
-import { CategoryState, GET_CATEGORIES, CategoryActionTypes } from './types';
+import { Result } from '../../utils/result';
+import { CategoryState, GOT_CATEGORIES, CategoryActionTypes } from './types';
+import { RECORD_EXPENSE } from '../expense/types';
+
+import { initialListData } from '../types';
 
 const initialState: CategoryState = {
-  categories: []
+  categories: Result.success(initialListData())
 };
 
 export const categoryReducer: Reducer<CategoryState, CategoryActionTypes> = (
@@ -10,10 +14,10 @@ export const categoryReducer: Reducer<CategoryState, CategoryActionTypes> = (
   action: CategoryActionTypes
 ) => {
   switch (action.type) {
-    case GET_CATEGORIES:
+    case GOT_CATEGORIES:
       return {
         ...state,
-        categories: action.categories
+        categories: action.categoryResult
       };
     default:
       return state;
