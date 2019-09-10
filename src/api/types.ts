@@ -19,17 +19,22 @@ export const wrongTypeField = (fieldName: string): WrongTypeField => ({
 });
 type ErrorField = MissingField | WrongTypeField;
 
-export interface SimpleDecodeError {
+export interface SimpleError {
   message: string;
 }
 
-export interface ObjectDecodeError {
-  [field: string]: string;
+export interface ObjectError {
+  message: string;
+  errors?: {
+    [field: string]: string;
+  };
 }
 
-export interface ArrayDecodeError {
+export interface ArrayError {
   message: string;
-  errors?: ObjectDecodeError[];
+  errors?: {
+    [index: number]: SimpleError | ObjectError;
+  };
 }
 
 interface NetworkError {
@@ -82,13 +87,20 @@ export type APIResponse<Data, DecodeError> = Result<
 export type Decoder<Data, DecodeError> = (
   json: any
 ) => Result<Data, DecodeError>;
-export type SimpleDecoder<Data> = Decoder<Data, SimpleDecodeError>;
-export type ObjectDecoder<Data> = Decoder<Data, ObjectDecodeError>;
-export type ArrayDecoder<Data> = Decoder<Data[], ArrayDecodeError>;
+export type SimpleDecoder<Data> = Decoder<Data, SimpleError>;
+export type ObjectDecoder<Data> = Decoder<Data, ObjectError>;
+export type ArrayDecoder<Data> = Decoder<Data[], ArrayError>;
 
 export interface Schema {
   [fieldName: string]: {
-    field: SimpleDecoder<any> | ObjectDecoder<any>;
+    field: SimpleDecoder<any> | ObjectDecoder<any> | ArrayDecoder<any>;
+    apiName: string;
+  };
+}
+
+export interface NestedSchema<Item, ItemDecoder> {
+  [fieldName: string]: {
+    field: SimpleDecoder<any> | ObjectDecoder<any> | ArrayDecoder<Item>;
     apiName: string;
   };
 }

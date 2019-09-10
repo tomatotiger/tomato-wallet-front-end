@@ -1,5 +1,7 @@
-import { Category, schema } from '../store/category/types';
+import { Category } from '../store/category/types';
 import { buildUrlWithParams } from '../utils/helper';
+import { paginationSchema, categorySchema } from './schema';
+import { PaginateArrayData } from '../store/types';
 
 import * as Request from './client';
 import * as Decoder from './decoder';
@@ -12,6 +14,8 @@ export const listCategory = (page: number = 1) => {
   const url = buildUrlWithParams('category/', { page });
   return Request.httpGet(
     url,
-    Decoder.listField<Category>(Decoder.objectField<Category>(schema))
+    Decoder.objectField<PaginateArrayData<Category>>(
+      paginationSchema(Decoder.objectField<Category>(categorySchema))
+    )
   );
 };
