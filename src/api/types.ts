@@ -97,10 +97,3 @@ export interface Schema {
     apiName: string;
   };
 }
-
-export interface NestedSchema<Item, ItemDecoder> {
-  [fieldName: string]: {
-    field: SimpleDecoder<any> | ObjectDecoder<any> | ArrayDecoder<Item>;
-    apiName: string;
-  };
-}

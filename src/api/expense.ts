@@ -19,7 +19,7 @@ export const listExpense = (page: number = 1) => {
   return Request.httpGet(
     url,
     Decoder.objectField<PaginateArrayData<Expense>>(
-      paginationSchema(Decoder.objectField<Expense>(expenseSchema))
+      paginationSchema(Decoder.objectField(expenseSchema))
     )
   );
 };
