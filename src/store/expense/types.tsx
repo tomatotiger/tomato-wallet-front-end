@@ -1,7 +1,6 @@
 import * as Category from '../category/types';
-import { APIResponse, Schema } from '../../api/types';
-import { ListData } from '../types';
-import * as Decoder from '../../api/decoder';
+import { APIResponse } from '../../api/types';
+import { PaginateArrayData } from '../types';
 
 export interface Expense {
   id: number;
@@ -16,18 +15,8 @@ export interface NewExpense {
   categoryName: string;
 }
 
-export const schema: Schema = {
-  id: { field: Decoder.numberField, apiName: 'id' },
-  amount: { field: Decoder.numberField, apiName: 'amount' },
-  recordTime: { field: Decoder.dateField, apiName: 'record_time' },
-  category: {
-    field: Decoder.objectField<Category.Category>(Category.schema),
-    apiName: 'category'
-  }
-};
-
 export interface ExpenseHistoryState {
-  expenses: APIResponse<ListData<Expense>, any>;
+  expenses: APIResponse<PaginateArrayData<Expense>, any>;
 }
 
 export const GET_EXPENSES = 'GET_EXPENSES';
@@ -38,7 +27,7 @@ export const DELETE_EXPENSE = 'DELETE_EXPENSE';
 
 interface GetExpenses {
   type: typeof GET_EXPENSES;
-  expensesResult: APIResponse<ListData<Expense>, any>;
+  expensesResult: APIResponse<PaginateArrayData<Expense>, any>;
 }
 
 export interface RecordExpenseAction {

@@ -1,4 +1,5 @@
 import { Result } from '../utils/result';
+import { PaginateArrayData } from '../store/types';
 
 interface MissingField {
   kind: 'missing';
@@ -18,12 +19,22 @@ export const wrongTypeField = (fieldName: string): WrongTypeField => ({
 });
 type ErrorField = MissingField | WrongTypeField;
 
-export interface SimpleDecodeError {
+export interface SimpleError {
   message: string;
 }
 
-export interface ObjectDecodeError {
-  [field: string]: string;
+export interface ObjectError {
+  message: string;
+  errors?: {
+    [field: string]: string;
+  };
+}
+
+export interface ArrayError {
+  message: string;
+  errors?: {
+    [index: number]: SimpleError | ObjectError;
+  };
 }
 
 interface NetworkError {
@@ -76,12 +87,13 @@ export type APIResponse<Data, DecodeError> = Result<
 export type Decoder<Data, DecodeError> = (
   json: any
 ) => Result<Data, DecodeError>;
-export type SimpleDecoder<Data> = Decoder<Data, SimpleDecodeError>;
-export type ObjectDecoder<Data> = Decoder<Data, ObjectDecodeError>;
+export type SimpleDecoder<Data> = Decoder<Data, SimpleError>;
+export type ObjectDecoder<Data> = Decoder<Data, ObjectError>;
+export type ArrayDecoder<Data> = Decoder<Data[], ArrayError>;
 
 export interface Schema {
   [fieldName: string]: {
-    field: SimpleDecoder<any> | ObjectDecoder<any>;
+    field: SimpleDecoder<any> | ObjectDecoder<any> | ArrayDecoder<any>;
     apiName: string;
   };
 }

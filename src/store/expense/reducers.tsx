@@ -9,10 +9,10 @@ import {
 } from './types';
 
 import { Result } from '../../utils/result';
-import { initialListData } from '../types';
+import { initialPaginateArrayData } from '../types';
 
 const initialState: ExpenseHistoryState = {
-  expenses: Result.success(initialListData())
+  expenses: Result.success(initialPaginateArrayData())
 };
 
 export const expenseReducer: Reducer<

@@ -1,5 +1,7 @@
-import { Expense, NewExpense, schema } from '../store/expense/types';
+import { Expense, NewExpense } from '../store/expense/types';
 import { buildUrlWithParams } from '../utils/helper';
+import { paginationSchema, expenseSchema } from './schema';
+import { PaginateArrayData } from '../store/types';
 
 import * as Request from './client';
 import * as Decoder from './decoder';
@@ -16,7 +18,9 @@ export const listExpense = (page: number = 1) => {
   const url = buildUrlWithParams('expense/', { page });
   return Request.httpGet(
     url,
-    Decoder.listField<Expense>(Decoder.objectField<Expense>(schema))
+    Decoder.objectField<PaginateArrayData<Expense>>(
+      paginationSchema(Decoder.objectField(expenseSchema))
+    )
   );
 };
 
@@ -24,7 +28,7 @@ export const createExpense = (expense: NewExpense) =>
   Request.httpPost(
     'expense/',
     serializer(expense),
-    Decoder.objectField<Expense>(schema)
+    Decoder.objectField<Expense>(expenseSchema)
   );
 
 export const thunkEditExpense = (expense: {

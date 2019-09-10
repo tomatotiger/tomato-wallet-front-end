@@ -3,10 +3,10 @@ import { Result } from '../../utils/result';
 import { CategoryState, GOT_CATEGORIES, CategoryActionTypes } from './types';
 import { RECORD_EXPENSE } from '../expense/types';
 
-import { initialListData } from '../types';
+import { initialPaginateArrayData } from '../types';
 
 const initialState: CategoryState = {
-  categories: Result.success(initialListData())
+  categories: Result.success(initialPaginateArrayData())
 };
 
 export const categoryReducer: Reducer<CategoryState, CategoryActionTypes> = (

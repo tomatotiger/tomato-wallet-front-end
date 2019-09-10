@@ -6,9 +6,9 @@ import {
   DELETE_EXPENSE
 } from './types';
 import { APIResponse } from '../../api/types';
-import { ListData } from '../types';
+import { PaginateArrayData } from '../types';
 
-export const gotExpenses = (expensesResult: APIResponse<ListData<Expense>, any>) => {
+export const gotExpenses = (expensesResult: APIResponse<PaginateArrayData<Expense>, any>) => {
   return {
     type: GET_EXPENSES,
     expensesResult

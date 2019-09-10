@@ -5,12 +5,12 @@ interface Pagination {
   count: number;
 }
 
-export interface ListData<Data> {
+export interface PaginateArrayData<Data> {
   pagination: Pagination;
   results: Data[];
 }
 
-export const initialListData = (): ListData<any> => ({
+export const initialPaginateArrayData = (): PaginateArrayData<any> => ({
   pagination: {
     count: 0,
     current: 1,
