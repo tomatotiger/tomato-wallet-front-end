@@ -1,5 +1,5 @@
 import React from 'react';
-import { RecordExpense } from '../components/RecordExpense';
+import RecordExpense from '../components/RecordExpense';
 import HistoryExpense from '../components/HistoryExpense';
 
 export const Homepage = () => {

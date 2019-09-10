@@ -8,14 +8,14 @@ interface Props {
   history: Expense[];
 }
 
-const HistoryExpense: SFC<Props> = props => {
+export const HistoryExpense: SFC<Props> = props => {
   return props.history.length < 1 ? (
     <span>No data</span>
   ) : (
     <ul className="expense-list">
       {props.history.map(expense => (
         <li key={expense.id}>
-          {expense.amount} - {expense.category.name} - {expense.date}
+          {expense.amount.toFixed(2)} - {expense.category.name} - {expense.date.toString()}
         </li>
       ))}
     </ul>

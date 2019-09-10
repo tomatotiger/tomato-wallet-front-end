@@ -1,5 +1,6 @@
 import {
   Expense,
+  NewExpense,
   GET_EXPENSES,
   RECORD_EXPENSE,
   UPDATE_EXPENSE,
@@ -13,10 +14,10 @@ export const getExpenses = (expenses: Expense[]) => {
   };
 };
 
-export const recordExpense = (newExpense: Expense) => {
+export const recordExpense = (expense: Expense) => {
   return {
     type: RECORD_EXPENSE,
-    payload: newExpense
+    payload: expense
   };
 };
 

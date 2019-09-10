@@ -13,7 +13,7 @@ import { ExpenseHistoryState } from './store/expense/types';
 import { Homepage } from './pages/Homepage';
 import { Footer } from './components/Footer';
 import './stylesheets/main.scss';
-import { thunkGetInitialData } from './thunks';
+import { thunkGetInitialData } from './api';
 
 interface AppProps {
   auth: AuthState;
@@ -22,7 +22,7 @@ interface AppProps {
   handleInitialData: () => Promise<void>;
 }
 
-class App extends Component<AppProps> {
+export class UnconnectedApp extends Component<AppProps> {
   componentDidMount() {
     this.props.handleInitialData();
   }
@@ -56,4 +56,4 @@ const mapStateToProps = (state: AppState) => ({
 export default connect(
   mapStateToProps,
   { handleInitialData }
-)(App);
+)(UnconnectedApp);
