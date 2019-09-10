@@ -18,7 +18,7 @@ export const expenseSchema: Schema = {
   }
 };
 
-export function paginationSchema<Item,ItemField>(itemField: Decoder<Item, any>): Schema {
+export function paginationSchema<Item>(itemField: Decoder<Item, any>): Schema {
   return {
     // current: { field: Fields.numberField, apiName: 'current' },
     previous: { field: Fields.pageField, apiName: 'previous' },
