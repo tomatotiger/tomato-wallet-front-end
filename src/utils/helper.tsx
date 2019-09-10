@@ -1,4 +1,5 @@
 import { ShallowWrapper } from 'enzyme';
+import { Result } from './result';
 
 export const getInputValue = (wrapper: ShallowWrapper, selector: string) => {
   const textInput = wrapper.find(selector);
@@ -60,16 +61,20 @@ export const buildUrlWithParams = (
   }
 };
 
-export const parseUrlParams = (url: string): { [s: string]: string } => {
-  let u = url || location.href;
-  u = u.trim().replace(/^[?#&]/, '');
+export const parseUrlParams = (url: any): { [s: string]: string } => {
+  const u = url.trim().replace(/^[?#&]/, '');
 
   if (!u) {
     return {};
   }
 
-  let params: { [s: string]: string } = {};
   const paramsString = u.split('?')[1];
+  if (!paramsString) {
+    return {};
+  }
+
+  let params: { [s: string]: string } = {};
+
   for (const param of paramsString.split('&')) {
     let [key, value] = param.replace(/\+/g, ' ').split('=');
     if (key && value) {
