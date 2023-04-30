@@ -18,7 +18,7 @@
     "react-redux": "^7.0.3",
     "react-redux-loading": "^1.0.1",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "2.1.8",
+    "react-scripts": "5.0.1",
     "react-widgets": "^4.4.10",
     "react-widgets-moment": "^4.0.26",
     "redux": "^4.0.1",
